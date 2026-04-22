@@ -1,7 +1,7 @@
 pluginManagement { includeBuild("../node_modules/@react-native/gradle-plugin") }
 plugins { id("com.facebook.react.settings") }
 
-def nodeBinary = System.getenv("NODE_BINARY") ?: "/home/ernesto/.net/Updates/oQz7oMoyWaxZ/.playwright/node/linux-x64/node"
+def nodeBinary = System.getenv("NODE_BINARY") ?: "node"
 extensions.configure(com.facebook.react.ReactSettingsExtension){ ex ->
 	ex.autolinkLibrariesFromCommand([nodeBinary, "node_modules/react-native/cli.js", "config"])
 }
