@@ -17,6 +17,23 @@ import { EstadoBadge } from '../../components/animales/EstadoBadge';
 import { AnimalModule } from '../../native/AnimalModule';
 import { AnimalModel, HistorialResumen } from '../../types/Animal';
 
+const calcularTiempoEnRancho = (fechaIngreso: string | null | undefined): string => {
+  if (!fechaIngreso) return 'Sin dato';
+  const ingreso = new Date(fechaIngreso);
+  const hoy = new Date();
+  let años = hoy.getFullYear() - ingreso.getFullYear();
+  let meses = hoy.getMonth() - ingreso.getMonth();
+  let dias = hoy.getDate() - ingreso.getDate();
+  if (dias < 0) {
+    meses -= 1;
+    dias += new Date(hoy.getFullYear(), hoy.getMonth(), 0).getDate();
+  }
+  if (meses < 0) { años -= 1; meses += 12; }
+  if (años > 0) return meses > 0 ? `${años} año${años > 1 ? 's' : ''}, ${meses} mes${meses > 1 ? 'es' : ''}` : `${años} año${años > 1 ? 's' : ''}`;
+  if (meses > 0) return `${meses} mes${meses > 1 ? 'es' : ''}`;
+  return `${dias} día${dias !== 1 ? 's' : ''}`;
+};
+
 const formatSexo = (sexo: string | null | undefined) => {
   if (!sexo) {
     return 'Sin dato';
@@ -218,12 +235,12 @@ export function DetalleAnimalScreen({ animalId, refreshToken, onBack, onEdit, on
 
           <View style={styles.infoRow}>
             <View style={styles.infoCell}>
-              <Text style={styles.infoLabel}>Nacimiento</Text>
+              <Text style={styles.infoLabel}>Fecha de Ingreso</Text>
               <Text style={styles.infoValue}>{currentAnimal.fecha || 'Sin dato'}</Text>
             </View>
             <View style={styles.infoCell}>
-              <Text style={styles.infoLabel}>Edad</Text>
-              <Text style={styles.infoValue}>3 años</Text>
+              <Text style={styles.infoLabel}>Tiempo en Rancho</Text>
+              <Text style={styles.infoValue}>{calcularTiempoEnRancho(currentAnimal.fecha)}</Text>
             </View>
           </View>
         </View>
