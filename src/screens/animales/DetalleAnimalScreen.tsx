@@ -16,6 +16,7 @@ import { EventoSanitarioItem } from '../../components/animales/EventoSanitarioIt
 import { EstadoBadge } from '../../components/animales/EstadoBadge';
 import { AnimalModule } from '../../native/AnimalModule';
 import { AnimalModel, HistorialResumen } from '../../types/Animal';
+import { RegistrarEventoSanitario } from '../sanitarios/RegistrarEventoSanitario';
 
 const calcularTiempoEnRancho = (fechaIngreso: string | null | undefined): string => {
   if (!fechaIngreso) return 'Sin dato';
@@ -63,6 +64,8 @@ export function DetalleAnimalScreen({ animalId, refreshToken, onBack, onEdit, on
   const [error, setError] = useState<string | null>(null);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [photoLoadFailed, setPhotoLoadFailed] = useState(false);
+  const [showRegistrarEvento, setShowRegistrarEvento] = useState(false);
+
 
   const loadDetalle = useCallback(async () => {
     setLoading(true);
@@ -266,11 +269,23 @@ export function DetalleAnimalScreen({ animalId, refreshToken, onBack, onEdit, on
 
         <Pressable
           style={styles.primaryButton}
-          onPress={() => Alert.alert('Eventos', 'Registro de eventos sanitarios: próximamente.')}
+          onPress={() => setShowRegistrarEvento(true)}
         >
           <Text style={styles.primaryButtonText}>Registrar Nuevo Evento</Text>
         </Pressable>
       </View>
+
+      <Modal
+        visible={showRegistrarEvento}
+        animationType="slide"
+        transparent={false}
+        onRequestClose={() => setShowRegistrarEvento(false)}
+      >
+        <RegistrarEventoSanitario
+          animalId={animalId}
+          onBack={() => setShowRegistrarEvento(false)}
+        />
+      </Modal>
 
       <Modal
         visible={deleteModalVisible}
